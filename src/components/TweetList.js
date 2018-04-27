@@ -13,9 +13,10 @@ class TweetList extends Component {
     // that loads the tweets again every 2500 ms
     // Think about how you'd be able to load tweets
     // without doing additional imports...
-    this.interval = setInterval(() => {
-      this.props.loadTweets();
-    }, 2500);   
+    // this.interval = setInterval(() => {
+    //   this.props.loadTweets();
+    // }, 2500); 
+    this.props.loadTweets();  
   }
 
   componentWillUnmount() {

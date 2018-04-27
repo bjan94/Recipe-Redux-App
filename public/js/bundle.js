@@ -2183,15 +2183,14 @@ var TweetList = function (_Component) {
   _createClass(TweetList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
       // TODO: load the tweets and set up an interval
       // that loads the tweets again every 2500 ms
       // Think about how you'd be able to load tweets
       // without doing additional imports...
-      this.interval = setInterval(function () {
-        _this2.props.loadTweets();
-      }, 2500);
+      // this.interval = setInterval(() => {
+      //   this.props.loadTweets();
+      // }, 2500); 
+      this.props.loadTweets();
     }
   }, {
     key: 'componentWillUnmount',
@@ -27233,49 +27232,18 @@ var _messageReducer = __webpack_require__(118);
 
 var _messageReducer2 = _interopRequireDefault(_messageReducer);
 
-var _tweetListReducer = __webpack_require__(119);
+var _feedReducer = __webpack_require__(156);
 
-var _tweetListReducer2 = _interopRequireDefault(_tweetListReducer);
-
-var _tweetReducer = __webpack_require__(120);
-
-var _tweetReducer2 = _interopRequireDefault(_tweetReducer);
-
-var _discoverReducer = __webpack_require__(121);
-
-var _discoverReducer2 = _interopRequireDefault(_discoverReducer);
+var _feedReducer2 = _interopRequireDefault(_feedReducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// TODO: you should somehow * combine reducers * hint hint
-// so that the reducer looks like
-// {
-//  authReducer: { isAuthenticated: ...  }
-//  tweetList:  { ids: [...] } 
-//  tweet: { id1: {...}, id2: {...} ... }
-//  profileReducer: { profile: { name: '', species: '' ... }}
-//  messageReducer: { messages: [ { messageType: ..., message: ...}, ...] }
-//  discoverReducer: { discovers: [...] }
-// }
-// store this reducer in a variable 'tweetApp'
-
-// let tweetApp = combineReducers({
-//   authReducer,
-//   tweetListReducer,
-//   tweetReducer,
-//   profileReducer,
-//   messageReducer,
-//   discoverReducer
-// });
 
 // TODO: determine appropriate imports
 var tweetApp = (0, _redux.combineReducers)({
   authReducer: _authReducer2.default,
   messageReducer: _messageReducer2.default,
-  tweetReducer: _tweetReducer2.default,
-  tweetListReducer: _tweetListReducer2.default,
-  discoverReducer: _discoverReducer2.default,
-  profileReducer: _profileReducer2.default
+  profileReducer: _profileReducer2.default,
+  feedReducer: _feedReducer2.default
 });
 
 exports.default = tweetApp;
@@ -27422,125 +27390,9 @@ var messageReducer = function messageReducer() {
 exports.default = messageReducer;
 
 /***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _tweetActions = __webpack_require__(6);
-
-// TODO: createa  reducer function named tweetListReducer with initial state
-// { ids: [] }.
-// When the LOADTWEETS_FUL action occurs, set ids equal to just the tweetId
-// for all the tweets from the action
-var tweetListReducer = function tweetListReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { ids: [] };
-  var action = arguments[1];
-
-  if (action.type === _tweetActions.LOADTWEETS_FUL) {
-    var tempIds = [];
-    var allTweets = action.tweets;
-    allTweets.forEach(function (tweet) {
-      tempIds.push(tweet.tweetId);
-    });
-    return { ids: tempIds };
-  }
-  return state;
-};
-exports.default = tweetListReducer;
-
-/***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _tweetActions = __webpack_require__(6);
-
-// TODO: createa  reducer called tweetReducer that has an initalState {}
-// if the LOADTWEETS_FUL action occurs, make sure that your eventual
-// state would look like
-// {
-//  whateverTheTweetId: { fullTweetObj },
-//  whateverTheTweetId2: { fullTweetobj2 }
-//  ...
-// }
-// basically i should be able to do state[someTweetId] and get the
-// full tweet object containing that tweet
-// on the CREATETWEET_FUL and FAVORITE_FUL actions, just  set the
-// tweet in the state equal to the data you get from the action
-var tweetReducer = function tweetReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case _tweetActions.LOADTWEETS_FUL:
-      var allTweets = action.tweets;
-      var tweetMap = {};
-      allTweets.forEach(function (tweet) {
-        tweetMap[tweet.tweetId] = tweet;
-      });
-
-      return tweetMap;
-    case _tweetActions.CREATETWEET_FUL:
-      return Object.assign({}, state, action.data);
-    case _tweetActions.FAVORITE_FUL:
-      return Object.assign({}, state, action.data);
-    default:
-      return state;
-  }
-};
-
-exports.default = tweetReducer;
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _tweetActions = __webpack_require__(6);
-
-// TODO: create a reducer function called discoverReducerw ith initialState
-// { discovers: [] }
-// if the action passed in is DISCOVERBIRDS_FUL then set discovers equal
-// to the data  of that action (refer  to the action caller for details on
-// what  that means. else just return the state
-//
-
-var discoverReducer = function discoverReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { discovers: [] };
-  var action = arguments[1];
-
-  if (action.type === _tweetActions.DISCOVERBIRDS_FUL) {
-    var tempDiscovered = [];
-    var discovered = action.data;
-    discovered.forEach(function (user) {
-      tempDiscovered.push(user);
-    });
-    return { discovers: tempDiscovered };
-  }
-  return state;
-};
-
-exports.default = discoverReducer;
-
-/***/ }),
+/* 119 */,
+/* 120 */,
+/* 121 */,
 /* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27633,8 +27485,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 // TODO: Determine appropriate imports
 
-// import EditProfile from './EditProfile';
-
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -27648,30 +27498,6 @@ var App = function (_Component) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      // TODO: should create a router with the following structure
-      // /profile/:id? => Profile must be protected (hint how  can we use AuthHOC?)
-      // /signx => SignX
-      // /logout => Logout (must be protected)
-      // /edit-profile  => EditProfile must be authenticated
-      // /feed => NewsFeed must be authenticated
-      // If it doesn't match anything, just put  the following syntax to say, render the signx page
-      // <Route component={SignX}/>
-      // Note the above should all be within a switch
-      //
-      // final html structure will look like
-      //
-      // <div class="container-fluid">
-      //    ...navigation bar from NavBar
-      //    ...flashes from Flashes
-      //    <div>
-      //      .. whatever route we are on
-      //    </div>
-      //  </div>
-
-      // <Route path="/profile/:id?" component={AuthHOC(Profile)}/>
-      // <Route path="/logout" component={Logout}/>
-      // <Route path="/edit-profile" component={EditProfile}/>
-      // <Route path="/feed" component={NewsFeed}/>
       return _react2.default.createElement(
         'div',
         { className: 'container-fluid' },
@@ -27728,12 +27554,6 @@ var _ProfileBox = __webpack_require__(127);
 
 var _ProfileBox2 = _interopRequireDefault(_ProfileBox);
 
-var _CreateTweetBox = __webpack_require__(128);
-
-var _CreateTweetBox2 = _interopRequireDefault(_CreateTweetBox);
-
-var _tweetActions = __webpack_require__(6);
-
 var _profileActions = __webpack_require__(56);
 
 var _reactRedux = __webpack_require__(4);
@@ -27767,31 +27587,7 @@ var Profile = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      // TODO: the component should have  a ProfileBox  and TweetList component, if
-      // an id is specified in the url (you can check this by looking at
-      // this.props.match.params.id then render out a CreateTweetBox else dont
-      // the ProfileBox should have the props `id` corresponding  to this.props.match.params.id
-      // `user` corresponding to a  function that will dispatch the getUser async function with
-      // appropriate arguments
-      // `favUnfav` corresponding to a function that  will dispatch the favUnfav async function with
-      // appropriate arguments
-      // the TweetList should have a single property `loadTweets` equal  to a function that will
-      // dispatch the loadTweets async function with appropriate arguments (in this case the
-      // current user id which you can grab from this.props.match.params.id
-      //
-      // html structure
-      // <div class="container">
-      //  <h2>Profile</h2>
-      //  <div class="row">
-      //    <div class="col-md-4">
-      //      ... profile box
-      //    </div>
-      //    <div class="col-md-8">
-      //      ... optionally a create tweet box
-      //      ...  tweet list
-      //    </div>
-      //  </div>
-      // </div>
+
       return _react2.default.createElement(
         'div',
         { className: 'container' },
@@ -27803,11 +27599,7 @@ var Profile = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'row' },
-          _react2.default.createElement(
-            'div',
-            { className: 'col-md-4' },
-            _react2.default.createElement(_ProfileBox2.default, { id: this.props.match.params.id, user: this.props.user })
-          ),
+          _react2.default.createElement('div', { className: 'col-md-4' }),
           _react2.default.createElement('div', { className: 'col-md-8' })
         )
       );
@@ -28065,96 +27857,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(ProfileBox);
 
 /***/ }),
-/* 128 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(4);
-
-var _tweetActions = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var CreateTweetBox = function (_Component) {
-  _inherits(CreateTweetBox, _Component);
-
-  function CreateTweetBox(props) {
-    _classCallCheck(this, CreateTweetBox);
-
-    var _this = _possibleConstructorReturn(this, (CreateTweetBox.__proto__ || Object.getPrototypeOf(CreateTweetBox)).call(this, props));
-
-    _this.submitTweet = _this.submitTweet.bind(_this);
-    return _this;
-  }
-
-  _createClass(CreateTweetBox, [{
-    key: 'submitTweet',
-    value: function submitTweet(e) {
-      e.preventDefault();
-      var tweetContent = this.refs.newTweet.value;
-      // TODO: include a call to create a new tweet
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'form',
-          { onSubmit: this.submitTweet },
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'div',
-              { className: 'form-group' },
-              _react2.default.createElement(
-                'label',
-                null,
-                'What\'s happening?'
-              ),
-              _react2.default.createElement('textarea', { className: 'form-control', ref: 'newTweet' })
-            ),
-            _react2.default.createElement('input', {
-              type: 'submit',
-              className: 'btn btn-primary',
-              value: 'submit'
-            })
-          )
-        )
-      );
-    }
-  }]);
-
-  return CreateTweetBox;
-}(_react.Component);
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {};
-// supply the component with a property 'createNewTweet' that will dispatch
-// the createNewTweet action  with the new tweet's content
-
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(CreateTweetBox);
-
-/***/ }),
+/* 128 */,
 /* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45367,13 +45070,9 @@ var SignX = function (_Component) {
       var username = this.refs.rusername.value;
       var password = this.refs.rpassword.value;
       var name = this.refs.name.value;
-      var species = this.refs.species.value;
-      var photo = this.refs.photo.value;
       dispatch((0, _auth.registerUser)({
         username: username,
         password: password,
-        species: species,
-        photo: photo,
         name: name
       }));
     }
@@ -45482,34 +45181,6 @@ var SignX = function (_Component) {
                   className: 'form-control',
                   type: 'text',
                   ref: 'name'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'form-group' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  'Species:'
-                ),
-                _react2.default.createElement('input', {
-                  className: 'form-control',
-                  type: 'text',
-                  ref: 'species'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'form-group' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  'Image:'
-                ),
-                _react2.default.createElement('input', {
-                  className: 'form-control',
-                  type: 'text',
-                  ref: 'photo'
                 })
               ),
               _react2.default.createElement(
@@ -45759,32 +45430,13 @@ var NavBar = function (_Component) {
   _createClass(NavBar, [{
     key: 'render',
     value: function render() {
-      // TODO: html  structure will  look like 
-      // <nav class="navbar navbar-expand-sm  navbar-light bg-light">
-      //  <a class="navbar-brand" href="#">Twitter for BORDS</a>
-      //  <ul class="navbar-nav">
-      //    ...navigation items
-      //  </ul>
-      // </nav>
-      // for each of the navigation items, the code is the following
-      // <li className="nav-item">
-      //  <Link className="nav-link" to="/feed">
-      //    Feed
-      //  </Link>
-      // </li>
-      //
-      // if the user is logged in (how do we check for that given we are
-      // connected to the isAuthenticated route?)
-      // render out links for feed, edit profile my profile, and logout
-      // else
-      // just render out links for signup/in (coresponging to the /signx route)
       return _react2.default.createElement(
         'nav',
         { className: 'navbar navbar-expand-sm navbar-light bg-light' },
         _react2.default.createElement(
           'a',
           { className: 'navbar-brand', href: '#' },
-          'Twitter for BORDS'
+          'GrubMatch'
         ),
         this.props.isAuthenticated ? _react2.default.createElement(
           'ul',
@@ -45796,15 +45448,6 @@ var NavBar = function (_Component) {
               _reactRouterDom.Link,
               { className: 'nav-link', to: '/feed' },
               'Feed'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'nav-item' },
-            _react2.default.createElement(
-              _reactRouterDom.Link,
-              { className: 'nav-link', to: '/edit-profile' },
-              'Edit Profile'
             )
           ),
           _react2.default.createElement(
@@ -45971,17 +45614,27 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _TweetList = __webpack_require__(30);
-
-var _TweetList2 = _interopRequireDefault(_TweetList);
-
-var _DiscoverBirds = __webpack_require__(137);
-
-var _DiscoverBirds2 = _interopRequireDefault(_DiscoverBirds);
-
 var _reactRedux = __webpack_require__(4);
 
 var _tweetActions = __webpack_require__(6);
+
+var _feedActions = __webpack_require__(157);
+
+var _video_list = __webpack_require__(152);
+
+var _video_list2 = _interopRequireDefault(_video_list);
+
+var _video_detail = __webpack_require__(154);
+
+var _video_detail2 = _interopRequireDefault(_video_detail);
+
+var _youtubeApiSearch = __webpack_require__(141);
+
+var _youtubeApiSearch2 = _interopRequireDefault(_youtubeApiSearch);
+
+var _foodlist = __webpack_require__(155);
+
+var _foodlist2 = _interopRequireDefault(_foodlist);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45991,60 +45644,40 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var API_KEY = 'AIzaSyAN7ZYLG9K4TblvTvTg-1s9jbCUKqKhdWM';
+
 var NewsFeed = function (_Component) {
   _inherits(NewsFeed, _Component);
 
   function NewsFeed(props) {
     _classCallCheck(this, NewsFeed);
 
-    return _possibleConstructorReturn(this, (NewsFeed.__proto__ || Object.getPrototypeOf(NewsFeed)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (NewsFeed.__proto__ || Object.getPrototypeOf(NewsFeed)).call(this, props));
+
+    _this.state = {
+      videos: [],
+      selectedVideo: null,
+      term: null
+    };
+
+    _this.props.changeVideo();
+    return _this;
   }
 
   _createClass(NewsFeed, [{
     key: 'render',
     value: function render() {
-      // TODO: render out this component that is the newsfeed
-      // should render out the DiscoverBirds component
-      // note that it needs a property getDisocverBirds that
-      // is a function which dispatches the getDiscoverBirds action
-      // also needs to mount TweetList with a property
-      // loadTweets that is a function which dispatches the
-      // loadTweets action.
-      // ultimate html structure will look like
-      // <div class="container">
-      //  <h2>News Feed</h2>
-      //  <div class="row">
-      //    <div class="col-md-4">
-      //      ...discoverbirds
-      //    </div>
-      //    <div class="col-md-8">
-      //      ...tweetlist
-      //    </div>
-      //  </div>
-      // </div>
+      var _this2 = this;
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
-        _react2.default.createElement(
-          'h2',
-          null,
-          'News Feed'
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'row' },
-          _react2.default.createElement(
-            'div',
-            { className: 'col-md-4' },
-            _react2.default.createElement(_DiscoverBirds2.default, { getDiscoverBirds: this.props.getDiscoverBirds })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-md-8' },
-            _react2.default.createElement(_TweetList2.default, { loadTweets: this.props.loadTweets })
-          )
-        )
+        { className: 'row' },
+        _react2.default.createElement(_video_detail2.default, { onNext: this.props.changeVideo, onLike: this.props.likeVideo, video: this.props.selectedVideo }),
+        _react2.default.createElement(_video_list2.default, {
+          onVideoSelect: function onVideoSelect(selectedVideo) {
+            return _this2.setState({ selectedVideo: selectedVideo });
+          },
+          videos: this.props.videos })
       );
     }
   }]);
@@ -46052,24 +45685,980 @@ var NewsFeed = function (_Component) {
   return NewsFeed;
 }(_react.Component);
 
-// hint hint ;)
-
+var mapStateToProps = function mapStateToProps(state) {
+  return state.feedReducer;
+};
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    loadTweets: function loadTweets() {
-      return dispatch((0, _tweetActions.loadTweets)());
+    changeVideo: function changeVideo() {
+      return dispatch((0, _feedActions.changeVideo)());
     },
-    getDiscoverBirds: function getDiscoverBirds() {
-      return dispatch((0, _tweetActions.getDiscoverBirds)());
+    likeVideo: function likeVideo() {
+      return dispatch((0, _feedActions.likeRecipe)());
     }
   };
 };
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(NewsFeed);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewsFeed);
 
 /***/ }),
-/* 137 */
+/* 137 */,
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return toString.call(val) === '[object FormData]';
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    return ArrayBuffer.isView(val);
+  } else {
+    return (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if a value is an Arguments object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Arguments object, otherwise false
+ */
+function isArguments(val) {
+  return toString.call(val) === '[object Arguments]';
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  typeof document.createelement -> undefined
+ */
+function isStandardBrowserEnv() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined' &&
+    typeof document.createElement === 'function'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array or arguments callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Check if obj is array-like
+  var isArrayLike = isArray(obj) || isArguments(obj);
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object' && !isArrayLike) {
+    obj = [obj];
+  }
+
+  // Iterate over array values
+  if (isArrayLike) {
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  }
+  // Iterate over object keys
+  else {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/*obj1, obj2, obj3, ...*/) {
+  var result = {};
+  forEach(arguments, function (obj) {
+    forEach(obj, function (val, key) {
+      result[key] = val;
+    });
+  });
+  return result;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  trim: trim
+};
+
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(138);
+
+var PROTECTION_PREFIX = /^\)\]\}',?\n/;
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+module.exports = {
+  transformRequest: [function (data, headers) {
+    if(utils.isFormData(data)) {
+      return data;
+    }
+    if (utils.isArrayBuffer(data)) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isObject(data) && !utils.isFile(data) && !utils.isBlob(data)) {
+      // Set application/json if no Content-Type has been specified
+      if (!utils.isUndefined(headers)) {
+        utils.forEach(headers, function (val, key) {
+          if (key.toLowerCase() === 'content-type') {
+            headers['Content-Type'] = val;
+          }
+        });
+
+        if (utils.isUndefined(headers['Content-Type'])) {
+          headers['Content-Type'] = 'application/json;charset=utf-8';
+        }
+      }
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function (data) {
+    if (typeof data === 'string') {
+      data = data.replace(PROTECTION_PREFIX, '');
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  headers: {
+    common: {
+      'Accept': 'application/json, text/plain, */*'
+    },
+    patch: utils.merge(DEFAULT_CONTENT_TYPE),
+    post: utils.merge(DEFAULT_CONTENT_TYPE),
+    put: utils.merge(DEFAULT_CONTENT_TYPE)
+  },
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN'
+};
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*global ActiveXObject:true*/
+
+var defaults = __webpack_require__(139);
+var utils = __webpack_require__(138);
+var buildUrl = __webpack_require__(145);
+var parseHeaders = __webpack_require__(146);
+var transformData = __webpack_require__(147);
+
+module.exports = function xhrAdapter(resolve, reject, config) {
+  // Transform request data
+  var data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Merge headers
+  var requestHeaders = utils.merge(
+    defaults.headers.common,
+    defaults.headers[config.method] || {},
+    config.headers || {}
+  );
+
+  if (utils.isFormData(data)) {
+    delete requestHeaders['Content-Type']; // Let the browser set it
+  }
+
+  // Create the request
+  var request = new (XMLHttpRequest || ActiveXObject)('Microsoft.XMLHTTP');
+  request.open(config.method.toUpperCase(), buildUrl(config.url, config.params), true);
+
+  // Set the request timeout in MS
+  request.timeout = config.timeout;
+
+  // Listen for ready state
+  request.onreadystatechange = function () {
+    if (request && request.readyState === 4) {
+      // Prepare the response
+      var responseHeaders = parseHeaders(request.getAllResponseHeaders());
+      var responseData = ['text', ''].indexOf(config.responseType || '') !== -1 ? request.responseText : request.response;
+      var response = {
+        data: transformData(
+          responseData,
+          responseHeaders,
+          config.transformResponse
+        ),
+        status: request.status,
+        statusText: request.statusText,
+        headers: responseHeaders,
+        config: config
+      };
+
+      // Resolve or reject the Promise based on the status
+      (request.status >= 200 && request.status < 300 ?
+        resolve :
+        reject)(response);
+
+      // Clean up request
+      request = null;
+    }
+  };
+
+  // Add xsrf header
+  // This is only done if running in a standard browser environment.
+  // Specifically not if we're in a web worker, or react-native.
+  if (utils.isStandardBrowserEnv()) {
+    var cookies = __webpack_require__(148);
+    var urlIsSameOrigin = __webpack_require__(149);
+
+    // Add xsrf header
+    var xsrfValue = urlIsSameOrigin(config.url) ?
+        cookies.read(config.xsrfCookieName || defaults.xsrfCookieName) :
+        undefined;
+
+    if (xsrfValue) {
+      requestHeaders[config.xsrfHeaderName || defaults.xsrfHeaderName] = xsrfValue;
+    }
+  }
+
+  // Add headers to the request
+  utils.forEach(requestHeaders, function (val, key) {
+    // Remove Content-Type if data is undefined
+    if (!data && key.toLowerCase() === 'content-type') {
+      delete requestHeaders[key];
+    }
+    // Otherwise add header to the request
+    else {
+      request.setRequestHeader(key, val);
+    }
+  });
+
+  // Add withCredentials to request if needed
+  if (config.withCredentials) {
+    request.withCredentials = true;
+  }
+
+  // Add responseType to request if needed
+  if (config.responseType) {
+    try {
+      request.responseType = config.responseType;
+    } catch (e) {
+      if (request.responseType !== 'json') {
+        throw e;
+      }
+    }
+  }
+
+  if (utils.isArrayBuffer(data)) {
+    data = new DataView(data);
+  }
+
+  // Send the request
+  request.send(data);
+};
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var axios = __webpack_require__(142);
+
+var ROOT_URL = 'https://www.googleapis.com/youtube/v3/search';
+
+module.exports = function (options, callback) {
+  if (!options.key) {
+    throw new Error('Youtube Search expected key, received undefined');
+  }
+
+  var params = {
+    part: 'snippet',
+    key: options.key,
+    q: options.term,
+    type: 'video'
+  };
+
+  axios.get(ROOT_URL, { params: params })
+    .then(function(response) {
+      if (callback) { callback(response.data.items); }
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
+};
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(143);
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var defaults = __webpack_require__(139);
+var utils = __webpack_require__(138);
+var dispatchRequest = __webpack_require__(144);
+var InterceptorManager = __webpack_require__(150);
+
+var axios = module.exports = function (config) {
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = utils.merge({
+      url: arguments[0]
+    }, arguments[1]);
+  }
+
+  config = utils.merge({
+    method: 'get',
+    headers: {},
+    timeout: defaults.timeout,
+    transformRequest: defaults.transformRequest,
+    transformResponse: defaults.transformResponse
+  }, config);
+
+  // Don't allow overriding defaults.withCredentials
+  config.withCredentials = config.withCredentials || defaults.withCredentials;
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  axios.interceptors.request.forEach(function (interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  axios.interceptors.response.forEach(function (interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+// Expose defaults
+axios.defaults = defaults;
+
+// Expose all/spread
+axios.all = function (promises) {
+  return Promise.all(promises);
+};
+axios.spread = __webpack_require__(151);
+
+// Expose interceptors
+axios.interceptors = {
+  request: new InterceptorManager(),
+  response: new InterceptorManager()
+};
+
+// Provide aliases for supported request methods
+(function () {
+  function createShortMethods() {
+    utils.forEach(arguments, function (method) {
+      axios[method] = function (url, config) {
+        return axios(utils.merge(config || {}, {
+          method: method,
+          url: url
+        }));
+      };
+    });
+  }
+
+  function createShortMethodsWithData() {
+    utils.forEach(arguments, function (method) {
+      axios[method] = function (url, data, config) {
+        return axios(utils.merge(config || {}, {
+          method: method,
+          url: url,
+          data: data
+        }));
+      };
+    });
+  }
+
+  createShortMethods('delete', 'get', 'head');
+  createShortMethodsWithData('post', 'put', 'patch');
+})();
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+/**
+ * Dispatch a request to the server using whichever adapter
+ * is supported by the current environment.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  return new Promise(function (resolve, reject) {
+    try {
+      // For browsers use XHR adapter
+      if ((typeof XMLHttpRequest !== 'undefined') || (typeof ActiveXObject !== 'undefined')) {
+        __webpack_require__(140)(resolve, reject, config);
+      }
+      // For node use HTTP adapter
+      else if (typeof process !== 'undefined') {
+        __webpack_require__(140)(resolve, reject, config);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(138);
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildUrl(url, params) {
+  if (!params) {
+    return url;
+  }
+
+  var parts = [];
+
+  utils.forEach(params, function (val, key) {
+    if (val === null || typeof val === 'undefined') {
+      return;
+    }
+
+    if (utils.isArray(val)) {
+      key = key + '[]';
+    }
+
+    if (!utils.isArray(val)) {
+      val = [val];
+    }
+
+    utils.forEach(val, function (v) {
+      if (utils.isDate(v)) {
+        v = v.toISOString();
+      }
+      else if (utils.isObject(v)) {
+        v = JSON.stringify(v);
+      }
+      parts.push(encode(key) + '=' + encode(v));
+    });
+  });
+
+  if (parts.length > 0) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
+  }
+
+  return url;
+};
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(138);
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {}, key, val, i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(138);
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  utils.forEach(fns, function (fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * WARNING:
+ *  This file makes references to objects that aren't safe in all environments.
+ *  Please see lib/utils.isStandardBrowserEnv before including this file.
+ */
+
+var utils = __webpack_require__(138);
+
+module.exports = {
+  write: function write(name, value, expires, path, domain, secure) {
+    var cookie = [];
+    cookie.push(name + '=' + encodeURIComponent(value));
+
+    if (utils.isNumber(expires)) {
+      cookie.push('expires=' + new Date(expires).toGMTString());
+    }
+
+    if (utils.isString(path)) {
+      cookie.push('path=' + path);
+    }
+
+    if (utils.isString(domain)) {
+      cookie.push('domain=' + domain);
+    }
+
+    if (secure === true) {
+      cookie.push('secure');
+    }
+
+    document.cookie = cookie.join('; ');
+  },
+
+  read: function read(name) {
+    var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+    return (match ? decodeURIComponent(match[3]) : null);
+  },
+
+  remove: function remove(name) {
+    this.write(name, '', Date.now() - 86400000);
+  }
+};
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * WARNING:
+ *  This file makes references to objects that aren't safe in all environments.
+ *  Please see lib/utils.isStandardBrowserEnv before including this file.
+ */
+
+var utils = __webpack_require__(138);
+var msie = /(msie|trident)/i.test(navigator.userAgent);
+var urlParsingNode = document.createElement('a');
+var originUrl;
+
+/**
+ * Parse a URL to discover it's components
+ *
+ * @param {String} url The URL to be parsed
+ * @returns {Object}
+ */
+function urlResolve(url) {
+  var href = url;
+
+  if (msie) {
+    // IE needs attribute set twice to normalize properties
+    urlParsingNode.setAttribute('href', href);
+    href = urlParsingNode.href;
+  }
+
+  urlParsingNode.setAttribute('href', href);
+
+  // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+  return {
+    href: urlParsingNode.href,
+    protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+    host: urlParsingNode.host,
+    search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+    hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+    hostname: urlParsingNode.hostname,
+    port: urlParsingNode.port,
+    pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+              urlParsingNode.pathname :
+              '/' + urlParsingNode.pathname
+  };
+}
+
+originUrl = urlResolve(window.location.href);
+
+/**
+ * Determine if a URL shares the same origin as the current location
+ *
+ * @param {String} requestUrl The URL to test
+ * @returns {boolean} True if URL shares the same origin, otherwise false
+ */
+module.exports = function urlIsSameOrigin(requestUrl) {
+  var parsed = (utils.isString(requestUrl)) ? urlResolve(requestUrl) : requestUrl;
+  return (parsed.protocol === originUrl.protocol &&
+        parsed.host === originUrl.host);
+};
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(138);
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function (fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function (id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `remove`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function (fn) {
+  utils.forEach(this.handlers, function (h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function (arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46079,87 +46668,277 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _video_list_item = __webpack_require__(153);
+
+var _video_list_item2 = _interopRequireDefault(_video_list_item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var VideoList = function VideoList(props) {
+  var videoItems = props.videos.map(function (video) {
+    return _react2.default.createElement(_video_list_item2.default, {
+      onVideoSelect: props.onVideoSelect,
+      video: video,
+      key: video.etag });
+  });
+
+  return _react2.default.createElement(
+    'ul',
+    { className: 'col-md-4 list-group' },
+    videoItems
+  );
+};
+
+exports.default = VideoList;
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(4);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _reactRouter = __webpack_require__(58);
+var VideoListItem = function VideoListItem(_ref) {
+  var video = _ref.video,
+      onVideoSelect = _ref.onVideoSelect;
+
+  // const video = props.video;
+  var imageUrl = video.snippet.thumbnails.default.url;
+
+  return _react2.default.createElement(
+    "li",
+    { onClick: function onClick() {
+        return onVideoSelect(video);
+      }, className: "list-group-item" },
+    _react2.default.createElement(
+      "div",
+      { className: "video-list media" },
+      _react2.default.createElement(
+        "div",
+        { className: "media-left" },
+        _react2.default.createElement("img", { className: "media-object", src: imageUrl })
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "media-body" },
+        _react2.default.createElement(
+          "div",
+          { className: "media-heading" },
+          video.snippet.title
+        )
+      )
+    )
+  );
+};
+
+exports.default = VideoListItem;
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var VideoDetail = function VideoDetail(_ref) {
+  var video = _ref.video,
+      onNext = _ref.onNext,
+      onLike = _ref.onLike;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var DiscoverBirds = function (_Component) {
-  _inherits(DiscoverBirds, _Component);
-
-  function DiscoverBirds() {
-    _classCallCheck(this, DiscoverBirds);
-
-    return _possibleConstructorReturn(this, (DiscoverBirds.__proto__ || Object.getPrototypeOf(DiscoverBirds)).call(this));
+  if (!video) {
+    return _react2.default.createElement(
+      "div",
+      null,
+      "Loading..."
+    );
   }
 
-  _createClass(DiscoverBirds, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      // TODO: once the component mounts, call the the function
-      // that allows you to discover birds (hint refer to the
-      // properties of the component
-      this.props.getDiscoverBirds();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var users = [];
+  var videoId = video.id.videoId;
+  var url = "https://www.youtube.com/embed/" + videoId;
 
-      this.props.discovers.map(function (i, idx) {
-        var authorUrl = '/profile/' + i.id;
-        users.push(_react2.default.createElement(
-          'div',
-          { key: idx },
-          _react2.default.createElement(
-            'a',
-            { href: authorUrl },
-            i.name
-          )
-        ));
-      });
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'card' },
-        _react2.default.createElement(
-          'div',
-          { className: 'card-body' },
-          _react2.default.createElement(
-            'h3',
-            { className: 'card-title' },
-            'Discover Birds'
-          ),
-          users
-        )
-      );
-    }
-  }]);
-
-  return DiscoverBirds;
-}(_react.Component);
-
-var mapStateToProps = function mapStateToProps(state) {
-  // only return the discoverReducer here
-  var discoverReducer = state.discoverReducer;
-
-  return discoverReducer;
+  return _react2.default.createElement(
+    "div",
+    { className: "video-detail col-md-8" },
+    _react2.default.createElement(
+      "div",
+      { className: "embed-responsive embed-responsive-16by9" },
+      _react2.default.createElement("iframe", { className: "embed-responsive-item", src: url })
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "details" },
+      _react2.default.createElement(
+        "div",
+        null,
+        video.snippet.title
+      ),
+      _react2.default.createElement(
+        "div",
+        null,
+        video.snippet.description
+      ),
+      _react2.default.createElement(
+        "button",
+        { onClick: onNext, type: "button", className: "btn btn-primary" },
+        "Next"
+      ),
+      _react2.default.createElement(
+        "button",
+        { onClick: onLike, type: "button", className: "btn btn-success" },
+        "Like!"
+      )
+    )
+  );
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(DiscoverBirds);
+exports.default = VideoDetail;
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var list = ['Poached Egg over Spinach and Mushroom', 'Poached Egg over Spinach topped with sunflower seeds', 'Energizing Oatmeal', 'Huevos Rancheros', 'Any Time Frittata', 'Breakfast Bagel', 'Granola with Fresh Fruit', 'Healthy Breakfast Frittata', 'Healthy Lifestyle Tea', 'High Energy Breakfast Shake', 'High Fiber Cereal', 'Italian Tofu Frittata', 'Mushroom, Tomato, Basil Frittata', 'Perfect Oatmeal', 'Poached Egg over Mediterranean Kale', 'Poached Eggs', 'Poached Eggs Over Collard Greens & Shiitake Mushrooms', 'Poached Eggs Over Sautéed Greens', 'Poached Eggs over Spinach', 'Poached Eggs over Spinach & Mushrooms', 'Poached Huevos Rancheros', 'Strawberry Smoothie', 'Swiss Breakfast', '5 Spice Salmon', 'Quick Broiled Salmon', 'Boiled Large Shrimp', 'Baked Halibut with Herbs', 'Baked Salmon & Walnut Patties With Red Bell Pepper Sauce', 'Braised Cod with Celery', 'Braised Salmon with Leeks', 'Halibut with Ginger and Scallions', 'Lemon Fish with Puree of Sweet Peas', 'Mediterranean Cod with Tomatoes', 'Miso Salmon', 'Pasta with Clams', 'Peanut Shrimp', 'Poached Cod with Fennel and Cauliflower', 'Poached Fish with Napa Cabbage', 'Quick Broiled Halibut', 'Quick Broiled Salmon with Ginger Mint Salsa', 'Salmon in Citrus Sauce', 'Salmon with Cucumber Chili Salad', 'Salmon with Dill Sauce', 'Salmon with Maple Dijon Glaze', 'Salmon with Mustard', 'Salmon with Mustard and Ginger', 'Southwestern Cod Sauté', 'Southwestern Salmon & Black Beans', 'Spicy Asian Shrimp', 'Steamed Salmon and Asparagus with Mustard Dill Sauce', 'Sweet N Sour Cod with Cabbage and Broccoli', 'Thai-Style Cod with Seaweed', 'Fresh Herbed Chicken Breasts', 'Broiled Chicken Salad', 'Healthy Sautéed Chicken & Asparagus', 'Healthy Sautéed Chicken & Bok Choy', 'Sautéed Chicken Breasts with Mustard and Tarragon', 'Chicken in a Bowl', 'Quick Broiled Chicken', 'Asian Chicken with Ginger and Bok Choy', 'Broiled Rosemary Chicken over Puréed Lentils and Swiss Chard', 'Curried Chicken Over Spinach', 'Healthy Sautéed Red Cabbage with Baked Chicken Breast', 'Holiday Turkey with Rice Stuffing & Gravy with Fresh Herbs', 'Quick Broiled Chicken Breast with Honey-Mustard Sauce', 'Roast Turkey Breast with Chipotle Chili Sauce', 'Sesame Braised Chicken & Cabbage'];
+
+exports.default = list;
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _feedActions = __webpack_require__(157);
+
+var initialState = {
+  videos: [],
+  selectedVideo: null,
+  term: null
+};
+
+var feedReducer = function feedReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _feedActions.CHANGE_VIDEO:
+      return {
+        videos: action.videos,
+        selectedVideo: action.videos[0],
+        term: action.term
+      };
+    case _feedActions.LIKE_VIDEO:
+      return state;
+    default:
+      return state;
+  }
+};
+
+exports.default = feedReducer;
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LIKE_VIDEO_REJ = exports.LIKE_VIDEO = exports.CHANGE_VIDEO = undefined;
+exports.changeVideo = changeVideo;
+exports.likeRecipe = likeRecipe;
+
+var _authenticatedRequest = __webpack_require__(57);
+
+var _authenticatedRequest2 = _interopRequireDefault(_authenticatedRequest);
+
+var _youtubeApiSearch = __webpack_require__(141);
+
+var _youtubeApiSearch2 = _interopRequireDefault(_youtubeApiSearch);
+
+var _foodlist = __webpack_require__(155);
+
+var _foodlist2 = _interopRequireDefault(_foodlist);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var API_KEY = 'AIzaSyAN7ZYLG9K4TblvTvTg-1s9jbCUKqKhdWM';
+
+var CHANGE_VIDEO = exports.CHANGE_VIDEO = 'CHANGE_VIDEO';
+var LIKE_VIDEO = exports.LIKE_VIDEO = 'LIKE_VIDEO';
+var LIKE_VIDEO_REJ = exports.LIKE_VIDEO_REJ = 'LIKE_VIDEO_REJ';
+
+function changeVideo() {
+  var term = _foodlist2.default[Math.floor(Math.random() * _foodlist2.default.length)] + 'recipe';
+
+  return function (dispatch) {
+    (0, _youtubeApiSearch2.default)({ key: API_KEY, term: term }, function (videos) {
+      dispatch({
+        type: CHANGE_VIDEO,
+        videos: videos,
+        term: term
+      });
+      console.log('here');
+    });
+  };
+}
+
+function likeRecipe(videoUrl) {
+  return function (dispatch) {
+    (0, _authenticatedRequest2.default)('POST', '/api/explore/like', videoUrl).then(function (res) {
+      return res.json();
+    }).then(function (resp) {
+      console.log(resp.data);
+      dispatch({
+        type: LIKE_VIDEO,
+        url: videoUrl,
+        message: 'You have liked this video'
+      });
+    }).catch(function (error) {
+      dispatch({
+        type: LIKE_VIDEO_REJ,
+        error: error,
+        message: 'Error'
+      });
+    });
+  };
+}
 
 /***/ })
 /******/ ]);

@@ -51,21 +51,12 @@ app.use('/api', profile(app));
 // ENDSTUB
 
 
-// TODO:  import  tweet routes from ./api/tweet
-// mount routes so that you can access routes as domain.com/api/tweet/
-// also pass in the app
-// STUB
-const tweet = require('./api/tweet');
-app.use('/api', tweet(app));
-// ENDSTUB
-
-
 // TODO: import newsfeed routes from ./api/newsfeed
 // mount routes  so that you can access routes  as  domain.com/api/newsfeed
 // also pass in the app
 // STUB
-const newsfeed = require('./api/newsfeed');
-app.use('/api', newsfeed(app));
+const explore = require('./api/explore');
+app.use('/api', explore(app));
 // ENDSTUB
 
 
